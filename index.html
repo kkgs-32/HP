@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ブログ記事一覧</title>
+  <title>記事一覧</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
@@ -38,6 +38,7 @@
         if (user) {
           showBlogManagement();
           loadPosts();
+          document.getElementById('user-email').textContent = `${user.email}`;
         } else {
           showLoginForm();
         }
@@ -110,7 +111,7 @@
 
         let urlButton = "";
         if (post.attachment && post.attachment.trim() !== "") {
-          urlButton = `<a class="button is-info mt-3 has-text-white" href="${post.attachment}" target="_blank">移動する</a>`;
+          urlButton = `<a class="button is-info is-outlined" href="${post.attachment}" target="_blank">移動する</a>`;
         }
 
         modalContent.innerHTML = `
@@ -122,19 +123,15 @@
           <p class="title is-5">${post.subtitle}</p>
           <hr>
           <p class="subtitle is-6">${post.content}</p>
+          ${urlButton}
         </section>
-        <footer class="modal-card-foot">
-          <div class="buttons">
-            ${urlButton}
-          </div>
-        </footer>
         `;
 
         modal.classList.add("is-active");
       }
 
       // モーダルを閉じる
-      document.querySelector(".modal-close").addEventListener("click", () => {
+      document.querySelector(".Modal-close").addEventListener("click", () => {
         document.getElementById("postModal").classList.remove("is-active");
       });
 
@@ -165,7 +162,8 @@
           <label class="label">パスワード</label>
           <input class="input" type="password" id="password" required>
         </div>
-        <button class="button is-primary has-text-white" type="submit">ログイン</button>
+        <button class="button is-primary is-outlined" type="submit">ログイン</button>
+        <a class="button is-small is-warning is-outlined" href="reconfigure.html">パスワードをお忘れの場合</a>
       </form>
     </div>
 
@@ -173,7 +171,11 @@
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
-        <button id="logoutButton" class="button is-danger has-text-white">ログアウト</button>
+        <button id="logoutButton" class="button is-danger is-outlined">ログアウト</button>
+      </div>
+      <div class="is-flex is-justify-content-space-between is-align-items-center">
+        <div class="subtitle is-6" id="user-email">取得中…</div>
+        <a class="button is-warning is-outlined is-small" href="change.html">パスワードを変更</a>
       </div>
       <hr>
       <div id="postList">読み込み中…</div>
@@ -184,7 +186,11 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <div id="modalContent"></div>
-        <button class="modal-close is-large" aria-label="close"></button>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button class="button is-primary is-outlined Modal-close">閉じる</button>
+          </div>
+        </footer>
       </div>
     </div>
   </section>

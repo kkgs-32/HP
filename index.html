@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>記事一覧</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
@@ -13,6 +14,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyCjZmvq16kBPs_xhlJp5FkiCzw42WhX5fM",
       authDomain: "kkgs-32.firebaseapp.com",
+      databaseURL: "https://kkgs-32-default-rtdb.firebaseio.com",
       projectId: "kkgs-32",
       storageBucket: "kkgs-32.firebasestorage.app",
       messagingSenderId: "76744845820",
@@ -51,9 +53,6 @@
         const password = document.getElementById("password").value;
 
         signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert("ログイン成功!");
-        })
         .catch((error) => {
           alert("ログイン失敗");
           console.error("ログインエラー: ", error);
@@ -83,7 +82,13 @@
             });
 
             // 日付順にソート
-            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            posts.sort((a, b) => {
+              const dateDiff = new Date(b.date) - new Date(a.date);
+              if (dateDiff === 0) {
+                return b.id.localeCompare(a.id); // IDの降順で並び替え（古いものが下）
+              }
+              return dateDiff;
+            });
 
             posts.forEach(post => {
               const postItem = document.createElement("div");
@@ -92,7 +97,7 @@
               postItem.innerHTML = `
               <p class="subtitle is-6 is-spaced">${post.date}</p>
               <p class="title is-4 is-spaced">${post.title}</p>
-              <p class="title is-6">${post.subtitle}</p>
+              <p class="subtitle is-5">${post.subtitle}</p>
               `;
               postItem.addEventListener("click", () => showPostDetail(post));
               postList.appendChild(postItem);
@@ -115,11 +120,11 @@
 
         modalContent.innerHTML = `
         <header class="modal-card-head">
-          <p class="modal-card-title title is-4">${post.title}</p>
+          <p class="title">${post.title}</p>
         </header>
         <section class="modal-card-body">
           <p class="subtitle is-5 is-spaced">${post.date}</p>
-          <p class="title is-5">${post.subtitle}</p>
+          <p class="title is-4">${post.subtitle}</p>
           <hr>
           <p class="subtitle is-6">${post.content}</p>
           ${urlButton}
@@ -163,10 +168,10 @@
         </div>
         <div class="is-flex is-justify-content-space-between is-align-items-center">
           <button class="button is-primary is-outlined" type="submit">ログイン</button>
-          <a class="button is-warning is-outlined" href="reconfigure.html">パスワードをお忘れの場合</a>
+          <a class="button is-warning is-small is-outlined" href="reconfigure.html">パスワードをお忘れの場合</a>
         </div>
         <hr>
-        <a class="button is-info is-outlined" href="https://docs.google.com/forms/d/e/1FAIpQLScyR8DN24bqKrcVC7kwGI3AMY-jS3mzg6ScmnzMRfXrjlr7Ng/viewform?usp=pp_url&entry.709343131=2024">アカウントを作成</a>
+        <a class="button is-info is-outlined" href="https://forms.gle/ysSTmT5r7y4uohaK8" target="_blank" rel="noopener noreferrer">アカウントを作成</a>
       </form>
     </div>
 

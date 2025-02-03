@@ -80,15 +80,6 @@
         });
       });
 
-      // ログアウトボタンの処理
-      document.getElementById("logoutButton").addEventListener("click", () => {
-        signOut(auth).then(() => {
-          localStorage.removeItem("lastLoginDate");
-        }).catch((error) => {
-          console.error("ログアウトエラー: ", error);
-        });
-      });
-
       // 投稿を表示する処理
       function loadPosts() {
         onValue(ref(database, "posts"), (snapshot) => {
@@ -227,7 +218,7 @@
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
-        <button id="logoutButton" class="button is-danger is-outlined">ログアウト</button>
+        <a class="button is-success is-outlined" href="https://lin.ee/xbLLd6w">LINE</a>
       </div>
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <div class="subtitle is-6" id="user-email">取得中…</div>

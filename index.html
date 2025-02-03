@@ -36,6 +36,7 @@
       const postList = document.getElementById("postList");
       const loginFormContainer = document.getElementById("loginFormContainer");
       const blogManagementContainer = document.getElementById("blogManagementContainer");
+      const searchInput = document.getElementById("searchInput");
 
       // 今日の日付を取得
       const today = new Date().toISOString().split('T')[0];
@@ -45,7 +46,7 @@
       if (lastLoginDate && lastLoginDate !== today) {
         signOut(auth).then(() => {
           localStorage.removeItem("lastLoginDate");
-          location.reload(); // ページをリロードしてログイン画面に戻す
+          location.reload();
         }).catch((error) => {
           console.error("自動ログアウトエラー: ", error);
         });
@@ -82,7 +83,7 @@
       // ログアウトボタンの処理
       document.getElementById("logoutButton").addEventListener("click", () => {
         signOut(auth).then(() => {
-          localStorage.removeItem("lastLoginDate"); // ログアウト時に日付データ削除
+          localStorage.removeItem("lastLoginDate");
         }).catch((error) => {
           console.error("ログアウトエラー: ", error);
         });
@@ -107,7 +108,7 @@
             posts.sort((a, b) => {
               const dateDiff = new Date(b.date) - new Date(a.date);
               if (dateDiff === 0) {
-                return b.id.localeCompare(a.id); // IDの降順で並び替え（古いものが下）
+                return b.id.localeCompare(a.id);
               }
               return dateDiff;
             });
@@ -124,6 +125,33 @@
               postItem.addEventListener("click", () => showPostDetail(post));
               postList.appendChild(postItem);
             });
+
+            // 検索機能
+            searchInput.addEventListener("input", () => {
+              const searchTerm = searchInput.value.toLowerCase();
+              const filteredPosts = posts.filter(post =>
+                post.title.toLowerCase().includes(searchTerm) ||
+                post.subtitle.toLowerCase().includes(searchTerm) ||
+                post.content.toLowerCase().includes(searchTerm) ||
+                post.date.toLowerCase().includes(searchTerm) ||
+                (post.attachment && post.attachment.toLowerCase().includes(searchTerm))
+              );
+
+              postList.innerHTML = "";
+              filteredPosts.forEach(post => {
+                const postItem = document.createElement("div");
+                postItem.classList.add("box");
+                postItem.style.cursor = "pointer";
+                postItem.innerHTML = `
+                <p class="subtitle is-6 is-spaced">${post.date}</p>
+                <p class="title is-4 is-spaced">${post.title}</p>
+                <p class="subtitle is-5">${post.subtitle}</p>
+                `;
+                postItem.addEventListener("click", () => showPostDetail(post));
+                postList.appendChild(postItem);
+              });
+            });
+
           } else {
             postList.innerHTML = "<p>投稿がありません。</p>";
           }
@@ -196,7 +224,6 @@
         <a class="button is-info is-outlined" href="https://forms.gle/ysSTmT5r7y4uohaK8" target="_blank" rel="noopener noreferrer">アカウントを作成</a>
       </form>
     </div>
-
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
@@ -206,10 +233,19 @@
         <div class="subtitle is-6" id="user-email">取得中…</div>
         <a class="button is-warning is-outlined is-small" href="change.html">パスワードを変更</a>
       </div>
+      <div class="field">
+        <div class="control has-icons-left">
+          <input class="input" type="text" id="searchInput" placeholder="記事を検索">
+          <span class="icon is-left">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </span>
+        </div>
+      </div>
       <hr>
       <div id="postList">読み込み中…</div>
     </div>
-
     <div id="postModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">

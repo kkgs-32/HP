@@ -39,6 +39,17 @@
 
       // 今日の日付を取得
       const today = new Date().toISOString().split('T')[0];
+      const lastLoginDate = localStorage.getItem("lastLoginDate");
+
+      // 前回のログイン日と比較し、違っていたら自動ログアウト
+      if (lastLoginDate && lastLoginDate !== today) {
+        signOut(auth).then(() => {
+          localStorage.removeItem("lastLoginDate");
+          location.reload(); // ページをリロードしてログイン画面に戻す
+        }).catch((error) => {
+          console.error("自動ログアウトエラー: ", error);
+        });
+      }
 
       // ログイン状態の監視
       onAuthStateChanged(auth, user => {
@@ -46,6 +57,9 @@
           showBlogManagement();
           loadPosts();
           document.getElementById('user-email').textContent = `${user.email}`;
+
+          // ログイン成功時に今日の日付を保存
+          localStorage.setItem("lastLoginDate", today);
         } else {
           showLoginForm();
         }
@@ -67,7 +81,9 @@
 
       // ログアウトボタンの処理
       document.getElementById("logoutButton").addEventListener("click", () => {
-        signOut(auth).catch((error) => {
+        signOut(auth).then(() => {
+          localStorage.removeItem("lastLoginDate"); // ログアウト時に日付データ削除
+        }).catch((error) => {
           console.error("ログアウトエラー: ", error);
         });
       });

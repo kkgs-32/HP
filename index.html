@@ -57,9 +57,6 @@
         if (user) {
           showBlogManagement();
           loadPosts();
-          document.getElementById('user-email').textContent = `${user.email}`;
-
-          // ログイン成功時に今日の日付を保存
           localStorage.setItem("lastLoginDate", today);
         } else {
           showLoginForm();
@@ -80,6 +77,15 @@
         });
       });
 
+      // ログアウトボタンの処理
+      document.getElementById("logoutButton").addEventListener("click", () => {
+        signOut(auth).then(() => {
+          localStorage.removeItem("lastLoginDate");
+        }).catch((error) => {
+          console.error("ログアウトエラー: ", error);
+        });
+      });
+
       // 投稿を表示する処理
       function loadPosts() {
         onValue(ref(database, "posts"), (snapshot) => {
@@ -89,7 +95,6 @@
             snapshot.forEach(childSnapshot => {
               const post = { id: childSnapshot.key, ...childSnapshot.val() };
 
-              // 未来の日付の投稿はスキップ
               if (post.date > today) return;
 
               posts.push(post);
@@ -218,12 +223,13 @@
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
-        <a class="button is-success is-outlined" href="https://lin.ee/xbLLd6w">LINE</a>
+        <button id="logoutButton" class="button is-danger is-outlined">ログアウト</button>
       </div>
       <div class="is-flex is-justify-content-space-between is-align-items-center">
-        <div class="subtitle is-6" id="user-email">取得中…</div>
+        <a class="button is-success is-outlined is-small" href="https://lin.ee/M6lMmPs">LINE</a>
         <a class="button is-warning is-outlined is-small" href="change.html">パスワードを変更</a>
       </div>
+      <hr>
       <div class="field">
         <div class="control has-icons-left">
           <input class="input" type="text" id="searchInput" placeholder="記事を検索">

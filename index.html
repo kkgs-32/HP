@@ -37,6 +37,7 @@
       const loginFormContainer = document.getElementById("loginFormContainer");
       const blogManagementContainer = document.getElementById("blogManagementContainer");
       const searchInput = document.getElementById("searchInput");
+      const userEmailElement = document.getElementById("userEmail");
 
       // 今日の日付を取得
       const today = new Date().toISOString().split('T')[0];
@@ -55,6 +56,7 @@
       // ログイン状態の監視
       onAuthStateChanged(auth, user => {
         if (user) {
+          userEmailElement.textContent = `${user.email}`;
           showBlogManagement();
           loadPosts();
           localStorage.setItem("lastLoginDate", today);
@@ -197,11 +199,25 @@
         blogManagementContainer.style.display = "none";
       }
     });
+
+
+    const modal = document.getElementById('myModal');
+    const openModalButton = document.getElementById('openModal');
+    const closeModalButtons = document.querySelectorAll('#closeModal');
+
+    openModalButton.addEventListener('click', () => {
+      modal.classList.add('is-active');
+    });
+
+    closeModalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        modal.classList.remove('is-active');
+      });
+    });
   </script>
 </head>
 <body>
   <section class="section">
-
     <div class="container" id="loginFormContainer" style="display:none;">
       <h2 class="title">ログイン</h2>
       <form id="loginForm">
@@ -218,14 +234,11 @@
         <a class="button is-info is-outlined" href="https://forms.gle/ysSTmT5r7y4uohaK8" target="_blank" rel="noopener noreferrer">アカウントを作成</a>
       </form>
     </div>
-
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
-        <button id="logoutButton" class="button is-danger is-outlined">ログアウト</button>
+        <button id="openModal" class="button is-success is-outlined">menu</button>
       </div>
-      <a class="button is-warning is-outlined is-small" href="change">パスワードを変更</a>
-      <hr>
       <div class="field">
         <div class="control has-icons-left">
           <input class="input" type="text" id="searchInput" placeholder="記事を検索">
@@ -240,7 +253,7 @@
       <div id="postList">読み込み中…</div>
     </div>
 
-    <div id="postModal" class="modal">
+    <div class="modal" id="postModal">
       <div class="modal-background"></div>
       <div class="modal-card">
         <div id="modalContent"></div>
@@ -251,7 +264,34 @@
         </footer>
       </div>
     </div>
-
+    <div class="modal" id="myModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">menu</p>
+        </header>
+        <section class="modal-card-body">
+          <p class="subtitle" id="userEmail"></p>
+          <div class="mb-5">
+            <a class="button is-warning is-outlined" href="change">パスワードを変更</a>
+          </div>
+          <div class="mb-5">
+            <button class="button is-danger is-outlined" id="alertButton">ログアウト</button>
+          </div>
+          <div>
+            <button onclick="showAlert()" class="button is-info is-outlined">サイト一覧</button>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button class="button is-primary is-outlined Modal-close" id="closeModal">閉じる</button>
+          </div>
+        </footer>
+      </div>
+    </div>
   </section>
+  <script>
+    function showAlert() {alert("「サイト一覧」は今後のアップデートで追加予定です！");}
+  </script>
 </body>
 </html>

@@ -45,7 +45,7 @@
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, currentPassword);
         await updatePassword(userCredential.user, newPassword);
-        window.location.href = "index.html";
+        window.location.href = "index";
         alert("パスワードが変更されました");
       } catch (error) {
         alert("エラー: " + error.message);

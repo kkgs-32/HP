@@ -201,6 +201,7 @@
 </head>
 <body>
   <section class="section">
+
     <div class="container" id="loginFormContainer" style="display:none;">
       <h2 class="title">ログイン</h2>
       <form id="loginForm">
@@ -212,20 +213,18 @@
           <label class="label">パスワード</label>
           <input class="input" type="password" id="password" required>
         </div>
-        <div class="is-flex is-justify-content-space-between is-align-items-center">
-          <button class="button is-primary is-outlined" type="submit">ログイン</button>
-          <a class="button is-warning is-small is-outlined" href="reconfigure.html">パスワードをお忘れの場合</a>
-        </div>
+        <button class="button is-primary is-outlined" type="submit">ログイン</button>
         <hr>
         <a class="button is-info is-outlined" href="https://forms.gle/ysSTmT5r7y4uohaK8" target="_blank" rel="noopener noreferrer">アカウントを作成</a>
       </form>
     </div>
+
     <div id="blogManagementContainer" style="display:none;">
       <div class="is-flex is-justify-content-space-between is-align-items-center">
         <h2 class="title">記事一覧</h2>
         <button id="logoutButton" class="button is-danger is-outlined">ログアウト</button>
       </div>
-      <a class="button is-warning is-outlined is-small" href="change.html">パスワードを変更</a>
+      <a class="button is-warning is-outlined is-small" href="change">パスワードを変更</a>
       <hr>
       <div class="field">
         <div class="control has-icons-left">
@@ -240,6 +239,7 @@
       <hr>
       <div id="postList">読み込み中…</div>
     </div>
+
     <div id="postModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -251,6 +251,7 @@
         </footer>
       </div>
     </div>
+
   </section>
 </body>
 </html>

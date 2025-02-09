@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>パスワード変更</title>
   <meta name="description" content="kkgs-32">
-  <link rel="icon" type="image/png" href="icon/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="icon/favicon.svg">
-  <link rel="shortcut icon" href="icon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="https://kkgs-32.github.io/HP/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="https://kkgs-32.github.io/HP/icon/favicon.svg">
+  <link rel="shortcut icon" href="https://kkgs-32.github.io/HP/icon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://kkgs-32.github.io/HP/icon/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-title" content="kkgs-32">
-  <link rel="manifest" href="icon/manifest.json">
+  <link rel="manifest" href="https://kkgs-32.github.io/HP/icon/manifest.json">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
@@ -41,7 +41,6 @@
         alert("新しいパスワードが一致しません。");
         return;
       }
-
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, currentPassword);
         await updatePassword(userCredential.user, newPassword);
@@ -59,28 +58,32 @@
       <h1 class="title">パスワード変更</h1>
       <form id="changePasswordForm">
         <div class="field">
-          <label class="label">メールアドレス</label>
-          <div class="control">
-            <input class="input" type="email" id="email" required>
-          </div>
+          <label class="label">メールアドレス
+            <div class="control">
+              <input class="input" type="email" id="email" autocomplete="email" required>
+            </div>
+          </label>
         </div>
         <div class="field">
-          <label class="label">現在のパスワード</label>
-          <div class="control">
-            <input class="input" type="password" id="currentPassword" required>
-          </div>
+          <label class="label">現在のパスワード
+            <div class="control">
+              <input class="input" type="password" id="currentPassword" required>
+            </div>
+          </label>
         </div>
         <div class="field">
-          <label class="label">新しいパスワード</label>
-          <div class="control">
-            <input class="input" type="password" id="newPassword" required>
-          </div>
+          <label class="label">新しいパスワード
+            <div class="control">
+              <input class="input" type="password" id="newPassword" required>
+            </div>
+          </label>
         </div>
         <div class="field">
-          <label class="label">新しいパスワード（確認）</label>
-          <div class="control">
-            <input class="input" type="password" id="confirmPassword" required>
-          </div>
+          <label class="label">新しいパスワード（確認）
+            <div class="control">
+              <input class="input" type="password" id="confirmPassword" required>
+            </div>
+          </label>
         </div>
         <div class="control">
           <button class="button is-link is-outlined" type="submit">パスワードを変更</button>
